@@ -14,7 +14,21 @@ shinyUI(fluidPage(
       fileInput(
         inputId = "file",
         label = "Choose input file"
-      )
+      ),
+      
+      br(),
+      br(),
+      
+      h3(
+        textOutput(outputId = "uniq_names")
+        ),
+      
+      br(),
+      br(),
+      
+      plotOutput(outputId = "plot"),
+      
+      downloadButton("downloadData", "Download")
     ),
 
     tabPanel(
