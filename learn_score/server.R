@@ -14,14 +14,24 @@ shinyServer(function(input, output, session) {
     if (is.null(infile)) {
       return(NULL)
     }
+    
+    if(str_detect(infile$name, "(xls$|xlsx$)")){
+      return(readxl::read_excel(path = infile$datapath, sheet = 1))
+    }
+    
+    if(str_detect(infile$name, "csv$")){
+      return(read_csv(file = infile$datapath))
+    }
 
-    readxl::read_excel(path = infile$datapath, sheet = 1)
+    return(NULL)
   })
 
   dat_proc <- reactive({
     req(dat_raw())
     dat_raw() %>% 
       janitor::clean_names() %>% 
+      mutate(possible_points = parse_double(possible_points),
+             auto_score = parse_double(auto_score)) %>% 
       mutate(score = coalesce(manual_score, auto_score)) %>% 
       mutate(question = str_remove(question, "^SPOT Question "),
              question = str_extract(question, "^\\d+")) %>% 
@@ -56,11 +66,12 @@ shinyServer(function(input, output, session) {
   
   # Downloadable csv of selected dataset ----
   output$downloadData <- downloadHandler(
+    
     filename = function() {
-      str_replace(input$file$name, "(\\.xlsx|\\.xls)", "_processed\\.xlsx")
+      str_replace(input$file$name, "(\\.xlsx|\\.xls|\\.csv)", "_processed\\.csv")
     },
     content = function(file) {
-      writexl::write_xlsx(dat_proc(), file)
+      write_csv(dat_proc(), file)
     }
   )
   

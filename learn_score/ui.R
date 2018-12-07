@@ -11,10 +11,16 @@ shinyUI(fluidPage(
   tabsetPanel(
     tabPanel(
       "Import",
+      
+      br(),
+      
       fileInput(
         inputId = "file",
         label = "Choose input file"
       ),
+      
+      downloadButton("downloadData", "Download CSV file"),
+      
       
       br(),
       br(),
@@ -26,10 +32,8 @@ shinyUI(fluidPage(
       br(),
       br(),
       
-      plotOutput(outputId = "plot"),
-      
-      downloadButton("downloadData", "Download")
-    ),
+      plotOutput(outputId = "plot")
+      ),
 
     tabPanel(
       "Raw data",
