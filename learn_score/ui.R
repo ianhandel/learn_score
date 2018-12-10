@@ -10,7 +10,7 @@ shinyUI(fluidPage(
 
   tabsetPanel(
     tabPanel(
-      "Import",
+      "Import/export",
       
       br(),
       

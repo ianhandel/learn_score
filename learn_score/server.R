@@ -22,6 +22,10 @@ shinyServer(function(input, output, session) {
     if(str_detect(infile$name, "csv$")){
       return(read_csv(file = infile$datapath))
     }
+    
+    if (str_detect(infile$name, "txt$")) {
+      return( read_delim(file = infile$datapath, delim = "\t"))
+    }
 
     return(NULL)
   })
@@ -48,7 +52,7 @@ shinyServer(function(input, output, session) {
   output$plot <- renderPlot({
     req(dat_proc())
     ggplot(dat_proc(), aes(x = total, fill = question)) +
-      geom_dotplot() +
+      geom_bar() +
       facet_wrap(~question) +
       labs(x = "score",
            y = "Number of students",
@@ -68,7 +72,8 @@ shinyServer(function(input, output, session) {
   output$downloadData <- downloadHandler(
     
     filename = function() {
-      str_replace(input$file$name, "(\\.xlsx|\\.xls|\\.csv)", "_processed\\.csv")
+      str_replace(input$file$name, "(\\.xlsx|\\.xls|\\.txt|\\.csv)",
+                  "_processed\\.csv")
     },
     content = function(file) {
       write_csv(dat_proc(), file)
