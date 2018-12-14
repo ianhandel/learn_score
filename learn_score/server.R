@@ -2,7 +2,11 @@
 
 library(shiny)
 library(readxl)
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(stringr)
+library(ggplot2)
 library(DT)
 
 
