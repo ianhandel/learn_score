@@ -7,6 +7,7 @@ library(tidyr)
 library(readr)
 library(stringr)
 library(ggplot2)
+library(janitor)
 library(DT)
 
 
@@ -37,7 +38,7 @@ shinyServer(function(input, output, session) {
   dat_proc <- reactive({
     req(dat_raw())
     dat_raw() %>% 
-      janitor::clean_names() %>% 
+      clean_names() %>% 
       mutate(possible_points = parse_double(possible_points),
              auto_score = parse_double(auto_score)) %>% 
       mutate(score = coalesce(manual_score, auto_score)) %>% 
